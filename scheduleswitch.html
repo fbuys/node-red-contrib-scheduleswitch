@@ -1,0 +1,548 @@
+<script type="text/html" data-template-name="scheduleswitch">
+  <div class="form-row">
+    <label for="node-input-name"
+      ><i class="fa fa-tag"></i>
+      <span data-i18n="node-red:common.label.name"></span
+    ></label>
+    <input
+      type="text"
+      id="node-input-name"
+      data-i18n="[placeholder]node-red:common.label.name"
+    />
+  </div>
+  <div class="form-row">
+    <label for="node-input-disabled"></label>
+    <input type="checkbox" id="node-input-disabled" style="width: 20px;" />
+    <label for="node-input-disabled" style="width: 200px;"
+      >Temporarily Disable Schedules</label
+    >
+  </div>
+  <div class="form-row" style="margin-bottom: 2px;">
+    <p class="text-center">
+      <i class="fa fa-list"></i>&nbsp;<strong>Schedules</strong>
+    </p>
+  </div>
+  <div class="form-row node-scheduleswitch-schedules-row">
+    <ol id="node-scheduleswitch-schedules"></ol>
+  </div>
+  <hr />
+  <div class="form-row">
+    <label for="node-input-onpayload"
+      ><i class="fa fa-envelope"></i> <span>On Payload</span></label
+    >
+    <input type="text" id="node-input-onpayload" placeholder="on" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-offpayload"
+      ><i class="fa fa-envelope"></i> <span>Off Payload</span></label
+    >
+    <input type="text" id="node-input-offpayload" placeholder="off" />
+  </div>
+  <hr />
+  <div class="form-row">
+    <label for="node-input-ontopic"
+      ><i class="fa fa-tasks"></i> <span>On Topic</span></label
+    >
+    <input type="text" id="node-input-ontopic" />
+  </div>
+  <div class="form-row">
+    <label for="node-input-offtopic"
+      ><i class="fa fa-tasks"></i> <span>Off Topic</span></label
+    >
+    <input type="text" id="node-input-offtopic" />
+  </div>
+  <hr />
+</script>
+
+<script type="text/html" data-template-scheduleswitch-row="">
+  <div>
+    <div style="display: inline-block; width: 55px; margin-left: 10px;">
+      <span>
+        <i class="fa fa-calendar-check-o"></i>
+        <strong>&nbsp;&nbsp;DAY</strong>
+      </span>
+    </div>
+    <div
+      style="display: inline-block; width: 30px; padding-inline-start: 10px;"
+    >
+      <label for="on_monday" style="padding-inline: 2px;">Mo</label>
+      <input
+        type="checkbox"
+        id="on_monday"
+        name="on_monday"
+        checked="checked"
+      />
+    </div>
+    <div style="display: inline-block; width: 30px; padding-inline-start: 5px;">
+      <label for="on_tuesday" style="padding-inline: 2px;">Tu</label>
+      <input
+        type="checkbox"
+        id="on_tuesday"
+        name="on_tuesday"
+        checked="checked"
+      />
+    </div>
+    <div style="display: inline-block; width: 30px; padding-inline-start: 5px;">
+      <label for="on_wednesday" style="padding-inline: 2px;">We</label>
+      <input
+        type="checkbox"
+        id="on_wednesday"
+        name="on_wednesday"
+        checked="checked"
+      />
+    </div>
+    <div style="display: inline-block; width: 30px; padding-inline-start: 5px;">
+      <label for="on_thursday" style="padding-inline: 2px;">Th</label>
+      <input
+        type="checkbox"
+        id="on_thursday"
+        name="on_thursday"
+        checked="checked"
+      />
+    </div>
+    <div style="display: inline-block; width: 30px; padding-inline-start: 5px;">
+      <label for="on_friday" style="padding-inline: 2px;">Fr</label>
+      <input
+        type="checkbox"
+        id="on_friday"
+        name="on_friday"
+        checked="checked"
+      />
+    </div>
+    <div style="display: inline-block; width: 30px; padding-inline-start: 5px;">
+      <label for="on_saturday" style="padding-inline: 2px;">Sa</label>
+      <input
+        type="checkbox"
+        id="on_saturday"
+        name="on_saturday"
+        checked="checked"
+      />
+    </div>
+    <div style="display: inline-block; width: 30px; padding-inline-start: 5px;">
+      <label for="on_sunday" style="padding-inline: 2px;">Su</label>
+      <input
+        type="checkbox"
+        id="on_sunday"
+        name="on_sunday"
+        checked="checked"
+      />
+    </div>
+  </div>
+  <div style="margin-top: 8px;">
+    <div style="display: inline-block; width: 50px; margin-left: 10px;">
+      <span><i class="fa fa-clock-o"></i><strong>&nbsp;&nbsp;ON</strong></span>
+    </div>
+    <select
+      class="node-input-scheduleswitch-select-hours on_h fill24"
+      style="display: inline-block; width: 75px; margin-left: 10px;"
+    >
+      <option value="-1">hour</option>
+    </select>
+    :
+    <select
+      class="node-input-scheduleswitch-select-minutes on_m fill60"
+      style="display: inline-block; width: 75px;"
+    >
+      <option value="-1">min</option>
+    </select>
+    :
+    <select
+      class="node-input-scheduleswitch-select-seconds on_s fill60"
+      style="display: inline-block; width: 75px;"
+    >
+      <option value="-1">sec</option>
+    </select>
+  </div>
+  <div style="margin-top: 8px;">
+    <div style="display: inline-block; width: 50px; margin-left: 10px;">
+      <span><i class="fa fa-clock-o"></i><strong>&nbsp;&nbsp;OFF</strong></span>
+    </div>
+    <select
+      class="node-input-scheduleswitch-select-hours off_h fill24"
+      style="display: inline-block; width: 75px; margin-left: 10px;"
+    >
+      <option value="-1">hour</option>
+    </select>
+    :
+    <select
+      class="node-input-scheduleswitch-select-minutes off_m fill60"
+      style="display: inline-block; width: 75px;"
+    >
+      <option value="-1">min</option>
+    </select>
+    :
+    <select
+      class="node-input-scheduleswitch-select-seconds off_s fill60"
+      style="display: inline-block; width: 75px;"
+    >
+      <option value="-1">sec</option>
+    </select>
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType("scheduleswitch", {
+    category: "input",
+    color: "#C0DEED",
+    defaults: {
+      name: { value: "" },
+      ontopic: { value: "" },
+      offtopic: { value: "" },
+      onpayload: { value: "" },
+      offpayload: { value: "" },
+      disabled: { value: false },
+      schedules: {
+        value: [],
+        validate: function (v) {
+          var schedules = [];
+
+          if (v.length < 1) {
+            return true;
+          }
+
+          /** make a first pass and create extra schedules if off is before on
+           * this so we can calculate overlaps later on */
+          for (var i = 0; i < v.length; i++) {
+            var on, off;
+            v[i].valid = true;
+
+            // for days we will use bools
+            const on_days = [
+              !!v[i].on_days[0],
+              !!v[i].on_days[1],
+              !!v[i].on_days[2],
+              !!v[i].on_days[3],
+              !!v[i].on_days[4],
+              !!v[i].on_days[5],
+              !!v[i].on_days[6],
+            ];
+            /** we need to work with ints */
+            on_h = parseInt(v[i].on_h);
+            on_m = parseInt(v[i].on_m);
+            on_s = parseInt(v[i].on_s);
+            off_h = parseInt(v[i].off_h);
+            off_m = parseInt(v[i].off_m);
+            off_s = parseInt(v[i].off_s);
+
+            on = createTime(on_h, on_m, on_s);
+            off = createTime(off_h, off_m, off_s);
+
+            /** 00:00:00 is unfortunately seen as start of day, so add 24 hours */
+            if (off_h === 0 && off_m === 0 && off_s === 0) {
+              off.setHours(off.getHours() + 24);
+            }
+
+            if (on.getTime() <= off.getTime()) {
+              /** normal schedule */
+              schedules.push({
+                on_days: on_days,
+                on_h: on_h,
+                on_m: on_m,
+                on_s: on_s,
+                off_h: off_h,
+                off_m: off_m,
+                off_s: off_s,
+                on: on,
+                off: off,
+                n: i,
+                valid: true,
+              });
+            } else {
+              /** off before on */
+              on = createTime(0, 0, 0);
+              off = createTime(off_h, off_m, off_s);
+
+              schedules.push({
+                on_days: on_days,
+                on_h: 0,
+                on_m: 0,
+                on_s: 0,
+                off_h: off_h,
+                off_m: off_m,
+                off_s: off_s,
+                on: on,
+                off: off,
+                n: i,
+                valid: true,
+              });
+
+              on = createTime(on_h, on_m, on_s);
+              off = createTime(23, 59, 59);
+
+              schedules.push({
+                on_days: on_days,
+                on_h: on_h,
+                on_m: on_m,
+                on_s: on_s,
+                off_h: 23,
+                off_m: 59,
+                off_s: 59,
+                on: on,
+                off: off,
+                n: i,
+                valid: true,
+              });
+            }
+          }
+          /** validate schedules */
+          for (var i = 0; i < schedules.length; i++) {
+            var s = schedules[i];
+
+            /** hours should be 0..23 */
+            if (s.on_h < 0 || s.on_h > 23 || s.off_h < 0 || s.off_h > 23) {
+              v[s.n].valid = false;
+            }
+
+            /** minutes and seconds should be 0..59 */
+            if (
+              s.on_m < 0 ||
+              s.on_s < 0 ||
+              s.on_m > 59 ||
+              s.on_s > 59 ||
+              s.off_m < 0 ||
+              s.off_s < 0 ||
+              s.off_m > 59 ||
+              s.off_s > 59
+            ) {
+              v[s.n].valid = false;
+            }
+
+            /** we dont allow both times to be the same */
+            if (s.on.getTime() == s.off.getTime()) {
+              v[s.n].valid = false;
+            }
+
+            /** check schedule overlap */
+
+            var start_i = schedules[i].on.getTime();
+            var end_i = schedules[i].off.getTime();
+
+            for (j = 0; j < schedules.length; j++) {
+              if (i == j) continue;
+
+              var start_j = schedules[j].on.getTime();
+              var end_j = schedules[j].off.getTime();
+
+              if (!(start_j >= end_i || end_j <= start_i)) {
+                v[s.n].valid = false;
+              }
+            }
+          }
+
+          /** if any are not valid return false */
+          for (i = 0; i < v.length; i++) {
+            if (v[i].valid === false) return false;
+          }
+
+          return true;
+
+          /**
+           * create a time object
+           */
+          function createTime(h, m, s) {
+            d = new Date();
+            d.setHours(h);
+            d.setMinutes(m);
+            d.setSeconds(s);
+            return d;
+          }
+        },
+      },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "timer.png",
+    label: function () {
+      return this.name || "scheduleswitch";
+    },
+    paletteLabel: "scheduleswitch",
+
+    oneditprepare: function () {
+      var node = this;
+
+      /**
+       * prepare schedule
+       */
+      var scheduleList = $("#node-scheduleswitch-schedules");
+
+      scheduleList
+        .css("min-height", "150px")
+        .css("min-width", "350px")
+        .editableList({
+          sortable: true,
+          removable: true,
+          addItem: function (row, index, data) {
+            schedule = data.schedule || false;
+
+            var template =
+              $("script[data-template-scheduleswitch-row]").html() || "";
+            $(row).append(template);
+            fillOptions(row, schedule);
+            scheduleResize();
+          },
+          removeItem: function (data) {
+            scheduleResize();
+          },
+        });
+
+      /**
+       * pass all existing schedules to editableList or pass an empty one
+       */
+      if (node.schedules.length == 0) {
+        scheduleList.editableList("addItem");
+      } else {
+        for (var i = 0; i < node.schedules.length; i++) {
+          var schedule = node.schedules[i];
+          scheduleList.editableList("addItem", { schedule: schedule, i: i });
+        }
+      }
+
+      /**
+       * resize the editableList
+       */
+      function scheduleResize() {
+        height = 40 + scheduleCount() * 93;
+        scheduleList.editableList("height", height);
+      }
+
+      /**
+       * number of schedules
+       * @returns {*}
+       */
+      function scheduleCount() {
+        return scheduleList.editableList("length");
+      }
+
+      /**
+       * fill the selects with hours/minutes/seconds
+       * @param row
+       */
+      function fillOptions(row, schedule) {
+        const default_schedule = {
+          on_days: [true, true, true, true, true, true, true],
+          on_h: -1,
+          on_m: -1,
+          on_s: -1,
+          off_h: -1,
+          off_m: -1,
+          off_s: -1,
+        };
+        schedule = schedule ? schedule : default_schedule;
+
+        var hours = row.find(".fill24");
+        for (var i = 0; i < 24; i++) {
+          i = pad(i);
+          hours.append($("<option></option>").val(i).text(i));
+        }
+
+        var minsec = row.find(".fill60");
+        for (var i = 0; i < 60; i++) {
+          i = pad(i);
+          minsec.append($("<option></option>").val(i).text(i));
+        }
+
+        // populate form values
+        document.getElementById("on_sunday").checked = schedule.on_days[0];
+        document.getElementById("on_monday").checked = schedule.on_days[1];
+        document.getElementById("on_tuesday").checked = schedule.on_days[2];
+        document.getElementById("on_wednesday").checked = schedule.on_days[3];
+        document.getElementById("on_thursday").checked = schedule.on_days[4];
+        document.getElementById("on_friday").checked = schedule.on_days[5];
+        document.getElementById("on_saturday").checked = schedule.on_days[6];
+        row.find(".on_h").val(schedule.on_h);
+        row.find(".on_m").val(schedule.on_m);
+        row.find(".on_s").val(schedule.on_s);
+        row.find(".off_h").val(schedule.off_h);
+        row.find(".off_m").val(schedule.off_m);
+        row.find(".off_s").val(schedule.off_s);
+
+        /** set error on the li */
+        if (schedule.valid === false) {
+          row.closest("li").css("background-color", "#f9b1bf");
+        }
+
+        /** modify some css */
+        row
+          .parent()
+          .find(".red-ui-editableList-item-handle")
+          .css("color", "black")
+          .css("left", "10px");
+        row
+          .parent()
+          .find(".red-ui-editableList-item-remove")
+          .css("right", "10px");
+      }
+
+      /**
+       * prepend string with 0
+       * @param s
+       * @returns {string|*}
+       */
+      function pad(s) {
+        s = s.toString();
+        if (s.length < 2) {
+          s = "0".concat(s);
+        }
+        return s;
+      }
+    },
+
+    oneditsave: function () {
+      var node = this;
+      node.schedules = [];
+
+      var scheduleList = $("#node-scheduleswitch-schedules");
+      var schedules = scheduleList.editableList("items");
+
+      schedules.each(function (i) {
+        const on_monday = document.getElementById("on_monday").checked;
+        const on_tuesday = document.getElementById("on_tuesday").checked;
+        const on_wednesday = document.getElementById("on_wednesday").checked;
+        const on_thursday = document.getElementById("on_thursday").checked;
+        const on_friday = document.getElementById("on_friday").checked;
+        const on_saturday = document.getElementById("on_saturday").checked;
+        const on_sunday = document.getElementById("on_sunday").checked;
+        var on_h = this.find(".on_h").val();
+        var on_m = this.find(".on_m").val();
+        var on_s = this.find(".on_s").val();
+        var off_h = this.find(".off_h").val();
+        var off_m = this.find(".off_m").val();
+        var off_s = this.find(".off_s").val();
+
+        var schedule = {
+          on_days: [
+            on_sunday,
+            on_monday,
+            on_tuesday,
+            on_wednesday,
+            on_thursday,
+            on_friday,
+            on_saturday,
+          ],
+          on_h: on_h,
+          on_m: on_m,
+          on_s: on_s,
+          off_h: off_h,
+          off_m: off_m,
+          off_s: off_s,
+        };
+
+        /** if any of the inputs was modified, save it */
+        if (
+          on_h != -1 ||
+          on_m != -1 ||
+          on_s != -1 ||
+          off_h != -1 ||
+          off_m != -1 ||
+          off_s != -1
+        ) {
+          node.schedules.push(schedule);
+        }
+      });
+    },
+  });
+</script>
+
+<script type="text/html" data-help-name="scheduleswitch">
+  Coming soon.
+</script>
