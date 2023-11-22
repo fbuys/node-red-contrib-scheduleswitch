@@ -31,12 +31,19 @@
       ><i class="fa fa-envelope"></i> <span>On Payload</span></label
     >
     <input type="text" id="node-input-onpayload" placeholder="on" />
+    <input type="hidden" id="node-input-onpayloadType" />
   </div>
   <div class="form-row">
-    <label for="node-input-offpayload"
-      ><i class="fa fa-envelope"></i> <span>Off Payload</span></label
-    >
-    <input type="text" id="node-input-offpayload" placeholder="off" />
+    <label for="node-input-offpayload">
+      <i class="fa fa-envelope"></i> <span>Off Payload</span>
+    </label>
+    <input
+      type="text"
+      id="node-input-offpayload"
+      class="js-payload-field"
+      placeholder="off"
+    />
+    <input type="hidden" id="node-input-offpayloadType" />
   </div>
   <hr />
   <div class="form-row">
@@ -190,6 +197,8 @@
       offtopic: { value: "" },
       onpayload: { value: "" },
       offpayload: { value: "" },
+      onpayloadType: { value: "str" },
+      offpayloadType: { value: "str" },
       disabled: { value: false },
       schedules: {
         value: [],
@@ -359,6 +368,18 @@
 
     oneditprepare: function () {
       var node = this;
+
+      // work on payload edit field
+      $("#node-input-onpayload").typedInput({
+        type: "str",
+        types: ["str", "json"],
+        typeField: "#node-input-onpayloadType",
+      });
+      $("#node-input-offpayload").typedInput({
+        type: "str",
+        types: ["str", "json"],
+        typeField: "#node-input-offpayloadType",
+      });
 
       /**
        * prepare schedule

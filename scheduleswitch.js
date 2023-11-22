@@ -144,7 +144,7 @@ module.exports = function (RED) {
      * @param state
      */
     function send(msg) {
-      if (typeof msg == "undefined") msg = { topic: "" };
+      if (typeof msg === "undefined") msg = { topic: "" };
 
       var state = node.scheduleswitch.state();
 
@@ -157,14 +157,31 @@ module.exports = function (RED) {
       /* set new output state */
       outputState = state;
 
-      if (state == "on") {
-        msg.payload = config.onpayload ? config.onpayload : state;
+      if (state === "on") {
+        const payload = config.onpayload ? config.onpayload : state;
+        msg.payload = formatPayload(payload, config.onpayloadType);
         msg.topic = config.ontopic ? config.ontopic : msg.topic;
       } else {
-        msg.payload = config.offpayload ? config.offpayload : state;
+        const payload = config.offpayload ? config.offpayload : state;
+        msg.payload = formatPayload(payload, config.offpayloadType);
         msg.topic = config.offtopic ? config.offtopic : msg.topic;
       }
       node.send(msg);
+    }
+
+    function formatPayload(payload, type) {
+      let result = payload;
+      if (type === "json") {
+        try {
+          result = JSON.parse(result);
+        } catch (error) {
+          console.log(
+            `Cannot send json payload, because the provided json is invalid.`,
+          );
+        }
+      }
+
+      return result;
     }
 
     /**
